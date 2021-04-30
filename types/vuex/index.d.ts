@@ -12,19 +12,18 @@ type GetSpliceKeys<Modules> = {
     [K in keyof Modules]:  GetSpliceKey<K, Modules[K]>
 }[keyof Modules]
 
-// list/logName   list   logName
-
 type GetFunc<T, A, B> = T[A & keyof T][B & keyof T[A & keyof T]]
 
 type GetSpliceObj<T> = {
     [K in GetSpliceKeys<T>]: K extends `${infer A}/${infer B}` ? GetFunc<T, A, B> : unknown
 }
 
-type moduleGetter = GetSpliceObj<GetGetters<typeof modules>>
+type getters<T> = GetGetters<T>
 
+type moduleGetter<T> = GetSpliceObj<getters<T>>
 
-type getter<T> = {
-    [K in keyof moduleGetter]: ReturnType<moduleGetter[K]>
+declare type getter<T> = {
+    [K in keyof moduleGetter<T>]: ReturnType<moduleGetter<T>[K]>
 }
 
-export default getter
+export { getter }
