@@ -6,7 +6,6 @@
   "scripts": {
     "compile": "tsc -p scripts",
     "update-codeowners": "node scripts/update.js"
-
   },
   "keywords": [],
   "author": "",
