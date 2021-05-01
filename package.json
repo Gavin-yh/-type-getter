@@ -5,9 +5,14 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc -p scripts",
-    "update-codeowners": "node scripts/update.js"
+    "not-needed": "node scripts/not-needed.js",
+    "update-codeowners": "node scripts/update-codeowners.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
 }

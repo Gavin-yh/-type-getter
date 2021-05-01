@@ -2,22 +2,23 @@ type GetGetter<Module> = Module extends {getter: infer G} ? G : unknown
 type GetGetters<Modules> = {
     [K in keyof Modules]: GetGetter<Modules[K]>
 }
-type addPreFix<P, K> = `${P & string}/${K & string}`
-type GetSpliceKey<P, Module> = addPreFix<P, keyof Module>
-type GetSpliceKeys<Modules> = {
-    [K in keyof Modules]:  GetSpliceKey<K, Modules[K]>
+
+type preFix<P, K> = `${P & string}/${K & string}`
+type spliceKey<P, Module> = preFix<P, keyof Module>
+type spliceKeys<Modules> = {
+    [K in keyof Modules]: spliceKey<K, Modules[K]>
 }[keyof Modules]
-type GetFunc<T, A, B> = T[A & keyof T][B & keyof T[A & keyof T]]
-type GetSpliceObj<T> = {
-    [K in GetSpliceKeys<T>]: K extends `${infer A}/${infer B}` ? GetFunc<T, A, B> : unknown
+
+type GetFun<T, A, B> = T[A & keyof T][B & keyof T[A & keyof T]]
+type concatProps<T> = {
+    [K in spliceKeys<T>]: K extends `${infer A}/${infer B}` ? GetFun<T, A, B> : unknown
 }
-type getters<T> = GetGetters<T>
-type moduleGetter<T> = GetSpliceObj<getters<T>>
+type getterFunType<T> = concatProps<GetGetters<T>>
 
-
-
-declare type getter<T> = {
-    [K in keyof moduleGetter<T>]: ReturnType<moduleGetter<T>[K]>
+declare type getterType<T> = {
+    [K in keyof   getterFunType<T>]:  getterFunType<T>[K] extends (...args: any) => infer R ? R : unknown
 }
 
-export { getter }
+export {
+    getterType
+}
